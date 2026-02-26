@@ -26,9 +26,7 @@ const initDB = async () => {
         CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
-        role VARCHAR(50) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
-        password TEXT NOT NULL,
         age INT,
         phone VARCHAR(15),
         address TEXT,
@@ -57,18 +55,29 @@ const initDB = async () => {
 initDB();
 
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/',  (req: Request, res: Response) => {
   res.send('Next Lavel Web Development')
 })
 
-app.post('/', (req: Request, res: Response) => {
-    console.log(req.body);
+app.post('/users',async (req: Request, res: Response) => {
+   const {name, email} = req.body;
 
-
+   try{
+    const result = await pool.query(
+        `INSERT INTO  users(name, email) VALUES($1, $2) RETURNING *`, [name, email]
+    );
     res.status(201).json({
         success: true,
-        message: "api is coling"
-    })
+        message: "data insaded fusseccefully",
+        data: result.rows[0]
+    });
+   }
+   catch(err: any) {
+    res.status(500).json({
+        success: false,
+        message: err.message,
+    });
+   }
 })
 
 app.listen(port, () => {
