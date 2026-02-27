@@ -1,18 +1,19 @@
 import express, { Request, Response } from "express";
 import config from "./config";
 import initDB, { pool } from "./config/db";
+import logger from "./middleware/logger";
 
 const app = express();
 const port = config.port;
 
 // parser
 app.use(express.json());
-
+// data base initializing
 initDB();
 
-
-app.get('/',  (req: Request, res: Response) => {
-  res.send('Next Lavel Web Development')
+// logger middleware
+app.get('/', logger, (req: Request, res: Response) => {
+  res.send('Hello Next Lavel Web Development')
 })
 
 app.post('/users',async (req: Request, res: Response) => {
