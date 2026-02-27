@@ -11,4 +11,6 @@ router.get("/", userControllers.getAllUser);
 
 router.get("/:id", userControllers.getSingleUser);
 
+router.put("/:id", userControllers.updateUser);
+
 export const userRoutes = router;
