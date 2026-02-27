@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
-import { pool } from "../../config/db";
+import { userServices } from "./user.service";
 
  const createUser = async (req: Request, res: Response) => {
    const {name, email} = req.body;
 
    try{
-    const result = await pool.query(
-        `INSERT INTO  users(name, email) VALUES($1, $2) RETURNING *`, [name, email]
-    );
+    const result = await userServices.createUser(name, email)
     res.status(201).json({
         success: true,
         message: "data insaded fusseccefully",
@@ -24,5 +22,4 @@ import { pool } from "../../config/db";
 
 export const userControllers = {
     createUser,
-    
 }
