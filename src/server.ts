@@ -20,31 +20,6 @@ app.get('/', logger, (req: Request, res: Response) => {
 // localhos:8000/users
 app.use("/users", userRoutes)
 
-app.get('/users/:id', async(req: Request, res: Response) => {
-
-    try{
-        const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [req.params.id]);
-        if(result.rows.length === 0 ) {
-            res.status(404).json({
-                success: false,
-                masses: "user not found"
-            });
-        }else{
-            res.status(200).json({
-                success: true,
-                massage: "user get successfully",
-                data: result.rows[0]
-            });
-        }
-    }catch(err: any){
-        res.status(500).json({
-            success: false,
-            massage: err.message
-        })
-    }
-
-});
-
 app.put('/users/:id', async (req: Request, res: Response) => {
     const {name, email}= req.body;
 
