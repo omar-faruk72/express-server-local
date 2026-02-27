@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import config from "./config";
 import initDB, { pool } from "./config/db";
 import logger from "./middleware/logger";
+import { userRoutes } from "./modules/user/user.routes";
 
 const app = express();
 const port = config.port;
@@ -16,26 +17,8 @@ app.get('/', logger, (req: Request, res: Response) => {
   res.send('Hello Next Lavel Web Development')
 })
 
-app.post('/users',async (req: Request, res: Response) => {
-   const {name, email} = req.body;
-
-   try{
-    const result = await pool.query(
-        `INSERT INTO  users(name, email) VALUES($1, $2) RETURNING *`, [name, email]
-    );
-    res.status(201).json({
-        success: true,
-        message: "data insaded fusseccefully",
-        data: result.rows[0]
-    });
-   }
-   catch(err: any) {
-    res.status(500).json({
-        success: false,
-        message: err.message,
-    });
-   }
-});
+// localhos:8000/users
+app.use("/users", userRoutes)
 
 app.get('/users', async (req: Request, res:Response) => {
 
