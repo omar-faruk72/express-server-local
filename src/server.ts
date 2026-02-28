@@ -3,6 +3,7 @@ import config from "./config";
 import initDB, { pool } from "./config/db";
 import logger from "./middleware/logger";
 import { userRoutes } from "./modules/user/user.routes";
+import { authRouters } from "./modules/auth/auth.routes";
 
 const app = express();
 const port = config.port;
@@ -99,8 +100,10 @@ app.put('/todos/:id', async(req: Request, res: Response) => {
             message: err.message
         })
     }
-})
+});
 
+// autho 
+app.use("/auth", authRouters);
 
 
 app.listen(port, () => {
